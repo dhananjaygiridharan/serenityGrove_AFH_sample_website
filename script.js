@@ -21,22 +21,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Smooth scrolling for anchor links
+    // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
+        if (anchor.getAttribute('href') !== '#') {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const menuToggle = document.querySelector('.menu-toggle');
+                    const navLinks = document.querySelector('.nav-links');
+                    if (menuToggle && navLinks && navLinks.classList.contains('active')) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
+        }
     });
     
     // Navbar scroll effect
@@ -71,27 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', highlightNav);
-    
-    // Form submission
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const formData = new FormData(this);
-            const formValues = Object.fromEntries(formData.entries());
-            
-            // Here you would typically send the form data to a server
-            console.log('Form submitted:', formValues);
-            
-            // Show success message
-            alert('Thank you for your message! We will get back to you soon.');
-            
-            // Reset form
-            this.reset();
-        });
-    }
     
     // Reviews slider functionality
     let currentReview = 0;
